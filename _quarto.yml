@@ -4,7 +4,7 @@ project:
 
 website:
   title: "Anurag Ranjak"
-  site-url: https://cakeinspace.github.io/personal-website
+  site-url: https://cakeinspace.github.io/anurag-ranjak
   navbar:
     left:
       - href: index.qmd
