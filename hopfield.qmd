@@ -1,0 +1,469 @@
+---
+title: "Hopfield Networks as Models of Emergent Function in Biology"
+---
+
+# Hopfield Networks as Models of Emergent Function in Biology
+
+- Mathematical descriptions of classic and modern Hopfield networks.
+
+  - A system that discriminates between "noise & signal"
+
+  - Geometric operation that projects onto subspace
+
+  - Gradient-like dynamics on a landscape
+
+- Applications of Hopfield network.
+
+All variants of Hopfield have a common underlying logic:
+
+1.  Dynamical update for the state of the system
+
+2.  A set of stored patterns that act as attractors
+
+[**Hopfield models share a set of common ingredients**]{.underline}
+
+1.  $\vec{x}(t) = \{x_1(t) \dots x_n(t)\} \longleftarrow$ spins or
+    neurons.
+
+2.  $\Xi_{\mu i} \equiv P \times N$; where $P = \#$ of patterns.\
+    In spin glasses the patterns are often assumed to be random and
+    independent, but in many biophys the patterns will be correlated.
+
+3.  An update rule or differential equation governing the dynamics.\
+    e.g. $$x_i(t+1) = f_i(\vec{x}(t)) \quad \text{for discrete time.}$$
+    or
+    $$\frac{dx_i}{dt} = f_i(\vec{x}(t)) - x_i \quad \text{for continuous time.}$$
+    $f_i$ are chosen such that all $P$ patterns are fixed points when
+    the no. of patterns is sufficiently small compared to $N$.
+
+4.  A $P$-dimensional order parameter $m(t) = (m_1(t) \dots m_p(t))$
+    which measures alignment of $\vec{x}(t)$ at time $t$ with each of
+    the stored patterns $P$.
+
+5.  An energy function, Lyapunov, which decreases with time as a result
+    of the update rule.
+
+The biggest difference between model variants is the choice of
+non-linear function $f_i(\vec x (t))$. ere, we focus on three choices
+for this function corresponding to the **classical Hopfield model**,
+**the projection method**, and **Modern Hopfield networks**.
+
+# (1) Classic Hopfield Network {#classic-hopfield-network .unnumbered}
+
+Consider a system of $N$ binary valued neurons that interact with each
+other via a pairwise interaction matrix $J_{ij}$.
+
+At time $t$, a neuron can be **firing** ($x_i(t) = 1$) or **silent**
+($x_i(t) = -1$). At each time step, a randomly chosen neuron is updated
+using an asynchronous dynamical update rule of the form:
+$$\begin{equation}
+    x_i(t+1) = \text{sign} \left( \sum_{j \neq i} J_{ij} x_j(t) \right)
+\end{equation}$$
+
+## Key Insight {#key-insight .unnumbered}
+
+It is possible to choose couplings $J_{ij}$ in such a way as to ensure
+that a specified set of binary patterns $\{\vec{\xi}_\mu\}$ are fixed
+points of the dynamics above. This is achieved via the **Outer Product**
+(Hebbian) rule:
+$$J_{ij} = \frac{1}{N} \sum_{\mu=1}^{P} \xi_{\mu i} \xi_{\mu j}$$ This
+ensures that $\{\vec{\xi}_\mu\}$ are the fixed points as long as
+$P \ll N$.
+
+## Lyapunov Function {#lyapunov-function .unnumbered}
+
+These dynamics also possess a Lyapunov function (Energy function):
+$$E = -\frac{1}{2} \sum_{i,j} x_i J_{ij} x_j$$
+
+**Claim:** $E$ decreases monotonically under the update rule.
+
+To prove this, consider the energy difference $\Delta E$ between two
+states that differ only at spin $k$: $$\begin{align*}
+    \Delta E &= E(x_k = +1) - E(x_k = -1) \\
+    &= \left( -\frac{1}{2} \sum_{i,j \neq k} x_i J_{ij} x_j - \frac{1}{2} J_{kk} - \sum_{j} x_j J_{kj} \right) - \left( -\frac{1}{2} \sum_{i,j \neq k} x_i J_{ij} x_j - \frac{1}{2} J_{kk} + \sum_{j} x_j J_{kj} \right) \\
+    &= -2 \sum_{j} x_j J_{kj}
+\end{align*}$$
+
+Analysis of the energy change:
+
+- If $\Delta E < 0 \implies \sum_j x_j J_{kj} > 0 \implies x_k = +1$
+  (according to update rule).
+
+- If $\Delta E > 0 \implies \sum_j x_j J_{kj} < 0 \implies x_k = -1$
+  (according to update rule).
+
+So, if we follow the dynamics, we stay at the state that has lower
+energy.
+
+## Order Parameters {#order-parameters .unnumbered}
+
+One powerful concept that emerged was the description of the system in
+terms of **order parameters** $m_\mu$ that measure the overlap between
+the current state of the system and stored patterns:
+$$m_\mu = \frac{1}{N} \sum_{j} \xi_{\mu j} x_j \equiv \text{inner product}$$
+In vector notation: $m_\mu = \vec{\xi}_\mu^T \vec{x}$.
+
+### Energy in terms of Order Parameters {#energy-in-terms-of-order-parameters .unnumbered}
+
+Starting with the energy function:
+$$E = -\frac{1}{2} \sum_{i,j} x_i J_{ij} x_j$$ Substitute the definition
+of $J_{ij} = \frac{1}{N} \sum_\mu \xi_{\mu i} \xi_{\mu j}$:
+$$\begin{align*}
+    E &= -\frac{1}{2} \sum_{i,j} x_i \left( \frac{1}{N} \sum_\mu \xi_{\mu i} \xi_{\mu j} \right) x_j \\
+    &= -\frac{1}{2N} \sum_\mu \left( \sum_i \xi_{\mu i} x_i \right) \left( \sum_j \xi_{\mu j} x_j \right) \\
+    &= -\frac{1}{2N} \sum_\mu (N m_\mu) (N m_\mu) \\
+    E &= -\frac{N}{2} \sum_\mu (m_\mu)^2
+\end{align*}$$
+
+### Update Rule in terms of Order Parameters {#update-rule-in-terms-of-order-parameters .unnumbered}
+
+Similarly, for the update rule: $$\begin{align*}
+    x_i(t+1) &= \text{sign} \left( \sum_{j \neq i} J_{ij} x_j \right) \\
+    &= \text{sign} \left( \sum_{j \neq i} \frac{1}{N} \sum_\mu \xi_{\mu i} \xi_{\mu j} x_j \right) \\
+    &= \text{sign} \left( \sum_\mu \xi_{\mu i} m_\mu \right)
+\end{align*}$$
+
+$$\begin{equation}
+    x_i(t+1) = \text{sign} \left( \sum_\mu \xi_{\mu i} m_\mu(t) \right) \tag{5}
+\end{equation}$$
+
+The system is pushed towards patterns with which it has large overlaps.
+**Why?** Because $m_\mu(t)$ is the inner product between a stored
+pattern and the current state. Consequently, whichever state is more
+aligned with a stored pattern is selected for the given coordinate
+$(i)$.
+
+However, because of the linear sum, we often encounter **spurious
+patterns**. There is a limit on storage capacity because as the number
+of patterns increases, any given state will overlap more and more with
+many different patterns. In the classical Hopfield network,
+$P_{\text{max}} \propto N$.
+
+## Continuous Time Approximation {#continuous-time-approximation .unnumbered}
+
+For continuous time, the dynamics can be approximated as:
+$$\begin{align*}
+    \frac{dx_i(t)}{dt} &\approx \frac{x_i(t+\Delta t) - x_i(t)}{\Delta t} \\
+    &\approx \frac{1}{\tau} \left( x_i(t+1) - x_i(t) \right) \\
+    &\approx \frac{1}{\tau} \left( \text{sign} \left( \sum_{j \neq i} J_{ij} x_j(t) \right) - x_i(t) \right)
+\end{align*}$$
+
+------------------------------------------------------------------------
+
+# Storing Correlated Patterns with Projection Method {#storing-correlated-patterns-with-projection-method .unnumbered}
+
+When patterns are correlated, we define the correlation between two
+patterns as: $$g_{\mu\nu} = \sum_{i,j} \xi_{\mu i} \xi_{\nu j}$$ Let
+$g^{\mu\nu}$ be the inverse matrix: $g^{\mu\nu} = g_{\mu\nu}^{-1}$. The
+interaction matrix $J_{ij}$ is then defined as:
+$$J_{ij} = \frac{1}{N} \sum_{\mu, \nu=1}^P \xi_{\mu i} g^{\mu\nu} \xi_{\nu j}$$
+This differs from the classic Hebbian rule
+$J_{ij} = \frac{1}{N} \sum_\mu \xi_{\mu i} \xi_{\mu j}$.
+
+We define **decorrelated order parameters** as:
+$$m^\mu = \sum_\nu g^{\mu\nu} m_\nu$$ The corresponding energy function
+becomes:
+$$E = -\frac{N}{2} \sum_{\mu, \nu} m^\mu g_{\mu\nu} m_\nu = -\frac{N}{2} \sum_\mu m^\mu m_\mu$$
+
+When the patterns are uncorrelated then the energy terms reduce to the
+orthogonal case.
+
+# Modern Hopfield Network {#modern-hopfield-network .unnumbered}
+
+## Exponential Modern Hopfield Network {#exponential-modern-hopfield-network .unnumbered}
+
+In the modern (exponential/dense) version, the update rule is:
+$$x_i(t+1) = \sum_\mu \xi_{\mu i} \sigma^\mu(\beta m^\mu)$$ The energy
+function is given by:
+$$E = -\sum \log \left( \sum_\mu \exp(m^\mu) \right) + \frac{1}{2} \sum x_i^2$$
+Where $\sigma$ is the **softmax** function:
+$$\sigma^\mu(\beta m_\mu) = \frac{e^{\beta m_\mu}}{\sum_\nu e^{\beta m_\nu}}$$
+
+### Derivation of Order Parameter Dynamics {#derivation-of-order-parameter-dynamics .unnumbered}
+
+Starting from the update rule:
+$$x_i(t+1) = \sum_\mu \xi_{\mu i} \sigma^\mu(\beta m^\mu)$$ Multiply by
+$\sum_{\rho} g^{\nu\rho} \xi_{\nu i}$ $$\begin{align*}
+    \sum_{i, \rho} g^{\nu\rho} \xi_{\rho i} x_i(t+1) &= \sum_{\mu, \rho, i} g^{\nu\rho} \xi_{\rho i} \xi_{\mu i} \sigma^\mu(\beta m^\mu) \\
+    &= \sum_{\mu, \rho} g^{\nu\rho} g_{\rho\mu} \sigma^\mu(\beta m^\mu)
+\end{align*}$$ Since
+$\sum_{\rho}g^{\nu\rho} g_{\rho\mu} = \delta_{\nu\mu}$ (the Kronecker
+delta), the expression simplifies: $$\begin{align*}
+    \sum_\rho g^{\nu\rho} m_\rho(t+1) &= \sum_{\mu, \rho} g^{\nu\rho} g_{\rho\mu} \sigma^\mu(\beta m^\mu) \\
+    m^\nu(t+1) &= \sum_\mu \delta_{\nu\mu} \sigma^\mu(\beta m^\mu) \\
+    \implies m^\mu &= \sigma^\mu(\beta m^\mu)
+\end{align*}$$
+
+If index is same it can be changed can do it nicer but i think it is
+still correct.
+
+## Zero Temperature Limit ($\beta \to \infty$) {#zero-temperature-limit-beta-to-infty .unnumbered}
+
+Now consider the limit as $\beta \to \infty$:
+
+- For $\mu \neq 0$ (patterns not aligned with the maximum overlap):
+  $$\sigma^\mu(\beta m^\mu) = \frac{1}{N + e^\beta} \to 0$$
+
+- For $\mu = 0$ (the pattern with the maximum overlap):
+  $$\sigma^\mu(\beta m^0) = \frac{e^\beta}{N + e^\beta} \to 1$$
+
+**Conclusion:** Therefore, in the zero-temperature limit, the network
+converges to the state with the closest order parameter. The whole state
+vector flows toward the stored pattern $\xi_\mu$ that has the highest
+initial overlap.
+
+# Interpretation of Hopfield dynamics {#interpretation-of-hopfield-dynamics .unnumbered}
+
+## Classical Hopfield {#classical-hopfield .unnumbered}
+
+The discrete-time update rule is given by:
+$$x_i(t+1) = \text{sign} \left( \sum_j J_{ij} x_j \right)$$ Substituting
+the Hebbian rule
+$J_{ij} = \frac{1}{N} \sum_\mu \xi_{\mu i} \xi_{\mu j}$:
+$$x_i(t+1) = \text{sign} \left( \frac{1}{N} \sum_j \sum_\mu \xi_{\mu i} \xi_{\mu j} x_j \right)$$
+When the current state $\vec{x}$ is exactly one of the stored patterns,
+$\vec{x} = \vec{\xi}_0$: $$\begin{align*}
+    x_i(t+1) &= \text{sign} \left( \frac{1}{N} \sum_j \sum_\mu \xi_{\mu i} \xi_{\mu j} \xi_{0j} \right) \\
+    &= \text{sign} \left( \underbrace{\frac{1}{N} \sum_j \xi_{0i} \xi_{0j} \xi_{0j}}_{\text{target pattern}} + \underbrace{\frac{1}{N} \sum_{\mu \neq 0} \sum_j \xi_{\mu i} \xi_{\mu j} \xi_{0j}}_{\text{interference}} \right) \\
+    &= \text{sign} \left( \frac{1}{N} \cdot \xi_{0i} \cdot N + \frac{1}{N} \sum_{\mu \neq 0} \sum_j \xi_{\mu i} \xi_{\mu j} \xi_{0j} \right) \\
+    &= \text{sign} \left( \xi_{0i} + \text{interference} \right)
+\end{align*}$$ (Note: The term $\sum_j \xi_{0j}^2 = \sum_j 1 = N$
+because the patterns are binary valued $\pm 1$).
+
+#### Noise Analysis:
+
+Since each $\xi_{\mu i}$ is drawn randomly, the total number of terms in
+the interference summation is $(P-1) \times N$. The variance of a sum of
+$(P-1)N$ i.i.d. random variables with mean 0 and variance 1 is $(P-1)N$.
+
+The interference term can therefore be modeled as:
+$$\text{interference} \approx \frac{1}{N} \left( 0 + Z \sqrt{(P-1)N} \right) \approx Z \sqrt{\frac{P}{N}}$$
+where $Z \sim \mathcal{N}(0,1)$. Consequently, the update rule behaves
+as:
+$$x_i(t+1) = \text{sign} \left( \xi_{0i} + Z \sqrt{\frac{P}{N}} \right)$$
+
+The error scales as $P/N$. For the pattern to remain a stable fixed
+point, the noise term must be small compared to the signal $\xi_{0i}$.
+This implies that the maximum storage capacity is:
+$$P_{\text{max}} \propto N$$
+
+# 3.2. On projection onto a subspace {#on-projection-onto-a-subspace .unnumbered}
+
+Transformation from state space $x_i$ to order parameters $m_\mu$ can be
+viewed as a change of basis from "neuron space" to "pattern space". This
+is nice because usually $P \le N$.
+
+We can construct a projection matrix $P$ that acts on $\vec{x}$ and
+projects it down to the subspace spanned by the stored patterns:
+$$\vec{x} = P\vec{x} + \vec{x}_\perp$$ The projection matrix is defined
+as: $$P_{ij} = \sum_{\mu, \nu} \xi_{\mu i} g^{\mu \nu} \xi_{\nu j}$$
+where $g^{\mu \nu}$ is the inverse of the correlation matrix. This
+matrix satisfies the property: $$P^2 = P \quad (\text{idempotency})$$
+
+------------------------------------------------------------------------
+
+If we replace $m^\mu = \sigma^\mu(\beta m^\mu)$ (modern Hopfield
+networks) into the energy function of MHN, we get:
+$$x_i(t+1) = \sum_\mu \xi_{\mu i} m^\mu(t+1)$$ The dynamics occur in
+pattern space and are connected to neuron space by the stored patterns,
+$\{\xi\}$.
+
+## Hopfield Models as Energy Based Models {#hopfield-models-as-energy-based-models .unnumbered}
+
+The energy is given by: $$E = -\frac{N}{2} \sum_\mu m^\mu m_\mu$$
+
+The update rule for the classic network can be written as:
+$$x_i^{\text{classic}}(t+1) = \text{sign} \left( -\frac{1}{N} \sum_\mu \xi_{\mu i} \frac{\partial E^{\text{quad}}}{\partial m_\mu} \right)$$
+
+The update rule for the modern network is:
+$$x_i^{\text{modern}}(t+1) = \sum_\mu \xi_{\mu i} \sigma^\mu(\beta m^\mu)$$
+
+Given that the order parameter relates to the energy gradient as:
+$$m^\mu = -\frac{2}{N} \frac{\partial E}{\partial m_\mu}$$
+
+We can express the modern update rule in terms of the energy gradient:
+$$x_i = \sum_\mu \xi_{\mu i} \sigma^\mu \left( -\frac{\beta}{N} \frac{\partial E^{\text{quad}}}{\partial m_\mu} \right)$$
+
+The order parameters $m^\mu$ measure the normalized inner product
+between the current state $\vec{x}$ and each stored pattern
+$\vec{\xi}^\mu$: $$\begin{equation}
+    m^\mu = \frac{1}{N}\sum_j \xi_{\mu j} x_j.
+\end{equation}$$ When a pattern is perfectly retrieved, $\vec{x}$ aligns
+with exactly one pattern and is orthogonal to all others, so $m^\nu = 1$
+and $m^{\mu \neq \nu} = 0$. This means $\vec{m}$ lives on a vertex of
+the simplex --- this follows directly from what retrieval means
+physically, not from any external imposition.
+
+The energy $$\begin{equation}
+    E = -\frac{N}{2}\sum_\mu m^\mu m_\mu
+\end{equation}$$ is an inverted parabola that pushes $\vec{m}$
+**radially outward from the origin** in whatever direction it is already
+pointing, with no preference for any particular direction and no natural
+stopping point. The nonlinearity does two jobs simultaneously: it **caps
+the magnitude** of $\vec{m}$ at the simplex boundary, and it **steers
+the outward motion** toward vertices rather than arbitrary directions.
+
+The sharpness of this steering depends on the choice of nonlinearity.
+The **sign function** is the harder, more aggressive one --- a
+discontinuous step that brutally maps everything to $\pm 1$, but whose
+linear aggregation of pattern overlaps is relatively poor at resolving
+close competitions between many patterns. The **softmax** is smoother
+but exponentially amplifies even tiny differences between $m^\mu$ values
+at large $\beta$: $$\begin{equation}
+    \sigma^\mu(\beta m^\mu) = \frac{e^{\beta m^\mu}}{\sum_\nu e^{\beta m^\nu}},
+\end{equation}$$ making it far more decisive at picking one pattern over
+others. This is precisely why modern Hopfield networks achieve
+exponential rather than linear storage capacity.
+
+# **Addendums and Clarifications by Sonnet 4.6 Extended**
+
+# Addendum 1: Why $E = \vec{x}^\perp \cdot \vec{x}^\perp$ {#addendum-1-why-e-vecxperp-cdot-vecxperp .unnumbered}
+
+This result is stated almost in passing in Section 3.2 of Yampolskaya &
+Mehta, but unpacking it requires connecting several ingredients
+simultaneously.
+
+## Setup {#setup .unnumbered}
+
+Recall the decomposition of any state $\vec{x}$ into a component lying
+*in* the pattern subspace and a component *orthogonal* to it (Eq. 16 of
+the paper): $$\begin{equation}
+    x_i = \sum_\mu m^\mu \xi_{\mu i} + x_i^\perp.
+\end{equation}$$
+
+The energy for the projection-method Hopfield model in terms of
+generalized order parameters is (Eq. 10): $$\begin{equation}
+    E = -\frac{N}{2}\sum_\mu m^\mu m_\mu.
+\end{equation}$$
+
+## The Fixed-Norm Constraint {#the-fixed-norm-constraint .unnumbered}
+
+For binary spins $x_i = \pm 1$, the total norm of the state vector is
+*fixed*: $$\begin{equation}
+    \vec{x} \cdot \vec{x} = \sum_i x_i^2 = N = \text{constant}.
+\end{equation}$$ Since the projected component $P\vec{x}$ and the
+orthogonal component $\vec{x}^\perp$ are orthogonal by construction, the
+Pythagorean theorem gives: $$\begin{equation}
+    |\vec{x}|^2 = |P\vec{x}|^2 + |\vec{x}^\perp|^2 = N.
+\end{equation}$$
+
+## Connecting the Two {#connecting-the-two .unnumbered}
+
+We now compute $|P\vec{x}|^2$ explicitly: $$\begin{align}
+    |P\vec{x}|^2 &= \sum_i \left(\sum_\mu m^\mu \xi_{\mu i}\right)^2
+    = \sum_{\mu,\nu} m^\mu m^\nu \underbrace{\sum_i \xi_{\mu i}\xi_{\nu i}}_{= N g_{\mu\nu}}
+    = N \sum_\mu m^\mu m_\mu.
+\end{align}$$ Therefore: $$\begin{equation}
+    |\vec{x}^\perp|^2 = N - N\sum_\mu m^\mu m_\mu.
+\end{equation}$$ Substituting into the energy: $$\begin{equation}
+    \boxed{E = -\frac{N}{2}\sum_\mu m^\mu m_\mu = \frac{1}{2}|\vec{x}^\perp|^2 - \frac{N}{2}.}
+\end{equation}$$
+
+## Why the Paper's Statement Holds {#why-the-papers-statement-holds .unnumbered}
+
+Since $N$ is a **constant** for binary spins, minimizing $E$ is *exactly
+equivalent* to minimizing
+$|\vec{x}^\perp|^2 = \vec{x}^\perp \cdot \vec{x}^\perp$. The two
+quantities differ only by a constant and a factor of 2, which do not
+affect the dynamics. The paper's statement
+$E = \vec{x}^\perp \cdot \vec{x}^\perp$ is therefore an *equivalence up
+to an additive constant*, not a strict algebraic equality.
+
+## Geometric Intuition {#geometric-intuition .unnumbered}
+
+The result is elegant: Hopfield dynamics are literally **projecting the
+state onto the pattern subspace**. The energy penalizes any component of
+$\vec{x}$ that lies *outside* the stored patterns. The system flows
+toward states where $\vec{x}^\perp \approx 0$, meaning the state lies
+almost entirely within the subspace spanned by $\{\vec{\xi}^\mu\}$ ---
+which is precisely where the memories live.
+
+# Addendum 2: Clarifications on Section 3.1 (Storage Capacity as Signal vs. Noise) {#addendum-2-clarifications-on-section-3.1-storage-capacity-as-signal-vs.-noise .unnumbered}
+
+## The Signal vs. Noise Split {#the-signal-vs.-noise-split .unnumbered}
+
+When the system is exactly at pattern $\nu$, the update rule gives:
+$$\begin{equation}
+    x_i(t+1) = \mathrm{sign}\!\left(\xi_{\nu i}
+    + \underbrace{\frac{1}{N}\sum_{\mu \neq \nu,\, j} \xi_{\mu i}\xi_{\mu j}\xi_{\nu j}}_{\text{noise}}\right).
+\end{equation}$$ The **signal** is $\xi_{\nu i} = \pm 1$. The noise term
+is a sum of products of three independent random $\pm 1$ variables.
+
+## The Central Limit Theorem Argument {#the-central-limit-theorem-argument .unnumbered}
+
+Each term $\xi_{\mu i}\xi_{\mu j}\xi_{\nu j}$ is itself $\pm 1$ with
+equal probability (since patterns are random and independent). The noise
+is a sum of $(P-1)\times N$ such terms, so by the CLT it behaves like a
+Gaussian with mean $0$ and standard deviation $\sim \sqrt{PN}$. After
+dividing by $N$, the noise scales as: $$\begin{equation}
+    \text{noise} \sim \sqrt{\frac{P}{N}}.
+\end{equation}$$ For retrieval to succeed, this must remain much smaller
+than the signal ($= 1$), giving the condition $P \ll N$ and the linear
+scaling $P_{\max} \propto N$.
+
+## Where the Hand-Waving Is {#where-the-hand-waving-is .unnumbered}
+
+1.  **Terms are not fully independent.** $\xi_{\mu i}$ appears in every
+    term for fixed $\mu$ and $i$. The CLT application is only justified
+    when $P \ll N$; this is a standard physics-style approximation.
+
+2.  **The prefactor is missing.** The argument gives only the *scaling*
+    $P_{\max} \propto N$. The precise critical capacity
+    $P_{\max} \approx 0.138N$ requires a full replica calculation; the
+    signal/noise argument cannot yield this prefactor.
+
+3.  **Exact initial conditions are assumed.** The argument assumes the
+    system starts *exactly* at a stored pattern. In practice one wants
+    retrieval from a *noisy* initial condition, which is a harder and
+    more physically relevant problem.
+
+# Addendum 3: Clarifications on Section 2.4 (Softmax Fixed Points) {#addendum-3-clarifications-on-section-2.4-softmax-fixed-points .unnumbered}
+
+## The Key Equation {#the-key-equation .unnumbered}
+
+After projecting the neuron-space update rule into order-parameter space
+(Eq. 13), the dynamics reduce to: $$\begin{equation}
+    m^\mu = \sigma^\mu(\beta m^\mu), \qquad
+    \sigma^\mu(\beta m^\mu) = \frac{e^{\beta m^\mu}}{\sum_\nu e^{\beta m^\nu}}.
+\end{equation}$$
+
+## Why the Stored Patterns Are Fixed Points {#why-the-stored-patterns-are-fixed-points .unnumbered}
+
+At a fixed point corresponding to pattern $\nu$, the order parameters
+are $m^\mu = \delta^{\mu\nu}$, i.e. $m^\nu = 1$ and
+$m^{\mu\neq\nu} = 0$. Plugging into the softmax at large $\beta$:
+$$\begin{align}
+    \sigma^\nu &= \frac{e^{\beta\cdot 1}}{e^{\beta} + (P-1)e^{0}}
+    \;\xrightarrow{\beta\to\infty}\; 1, \\[4pt]
+    \sigma^{\mu\neq\nu} &= \frac{e^{\beta\cdot 0}}{e^{\beta} + (P-1)}
+    \;\xrightarrow{\beta\to\infty}\; 0.
+\end{align}$$ So $(m^\nu = 1,\, m^{\mu\neq\nu} = 0)$ is indeed a fixed
+point in the large-$\beta$ limit.
+
+## Where the Hand-Waving Is {#where-the-hand-waving-is-1 .unnumbered}
+
+1.  **Stability is not proven.** The paper only shows these are *fixed
+    points*, not that they are *stable attractors*. Proving stability
+    requires showing the Jacobian of the update map has eigenvalues of
+    magnitude less than 1 at these points, which the paper omits.
+
+2.  **The derivation of Eq. 13 is compressed.** The key step ---
+    multiplying both sides of the update rule by
+    $\sum_\nu g^{\gamma\nu}\xi_{\nu i}$ and summing over $i$ --- is not
+    motivated in the text. The reason is that this operation applies the
+    **left inverse** of the pattern matrix, projecting the neuron-space
+    equation back into pattern space.
+
+3.  **Finite-temperature behavior is implicit.** The paper says
+    "sufficiently small temperatures" without quantifying how small.
+    Unlike the classical model, no full phase diagram (analogous to
+    Figure 2C) is presented for the modern network.
+
+4.  **Continuous-valued patterns are asserted, not justified.** The
+    softmax fixed-point argument formally goes through for continuous
+    $\xi_{\mu i}$, but convergence properties and basin-of-attraction
+    geometry can differ qualitatively from the binary case, and this is
+    not analyzed.
+
+**I have skipped Glauber dynamics and Restricted Boltzmann Machine
+interpretation of the Hopfield networks.**

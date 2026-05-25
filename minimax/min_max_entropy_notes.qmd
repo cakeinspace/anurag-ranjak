@@ -1,0 +1,86 @@
+---
+title: "Min-Max Entropy Principles"
+author: "Handwritten Notes Transcription"
+---
+
+## Introduction to Min-Max Entropy
+
+### Two Parts of the Principle
+* **Maximum Entropy Principle for Feature Binding:** Used to fit a probability distribution that adheres to known constraints while remaining as unbiased (maximal entropy) as possible.
+* **Minimum Entropy Principle for Feature Selection:** Among all plausible feature sets, we choose the optimal feature set whose maximum entropy model distribution has the *minimum* entropy.
+
+---
+
+## Fitting a Max-Ent Distribution
+
+### The Minimum Entropy Principle
+Let $p$ be the fitted distribution ($P \equiv p(x)$) and $f$ be the true underlying distribution ($f \equiv f(x)$).
+
+$$
+\begin{aligned}
+KL(f, P) &= \int f \log \frac{f}{p} \\
+&= \int f \log f \, dx - \int f \log p \, dx
+\end{aligned}
+$$
+
+Given that the parametric form of the Maximum Entropy distribution is:
+$$
+P = \frac{1}{Z(x)} e^{-\sum_{\alpha} \lambda_{\alpha} \phi_{\alpha}} \implies \log p = -\log Z - \sum_{\alpha} \lambda_{\alpha} \phi_{\alpha}
+$$
+
+Substituting $\log p$ back into the KL divergence equation:
+$$
+\begin{aligned}
+KL(f, P) &= \int f \log f \, dx - \int f \left( -\log Z - \sum_{\alpha} \lambda_{\alpha} \phi_{\alpha} \right) dx \\
+&= \int f \log f \, dx + \int f \log Z \, dx + \int f \sum_{\alpha} \lambda_{\alpha} \phi_{\alpha} \, dx \\
+&= \int f \log f \, dx + \log Z + \sum_{\alpha} \lambda_{\alpha} \int f \phi_{\alpha} \, dx
+\end{aligned}
+$$
+
+Since the expected values of the features under the empirical distribution match the model distribution ($\int f \phi_{\alpha} = \int p \phi_{\alpha}$):
+$$
+\begin{aligned}
+&= \int f \log f \, dx + \log Z + \sum_{\alpha} \int \lambda_{\alpha} p \phi_{\alpha} \, dx \\
+&= \int f \log f \, dx - \int p \log p \, dx \\
+&= -\text{Entropy}(f) + \text{Entropy}(P)
+\end{aligned}
+$$
+
+Where:
+* $-\text{Entropy}(f)$ is **fixed**.
+* $\text{Entropy}(P)$ **depends on the set of features included in the data**.
+
+---
+
+## Coding Scheme and Model Complexity
+
+The probability distribution $P(x)$ defines a coding scheme where each sample $x$ is assigned a coding length of $-\log p(x)$ and the entropy is the expected coding length. 
+
+The Maximum Entropy ($\text{ME}$) method chooses the distribution $p$ with the shortest average coding length under constraints:
+
+$$
+\int p \phi^{\alpha} = \mu_{\text{obs}}^{\alpha}
+$$
+
+$$
+p(x) = \frac{1}{Z(x)} e^{-\sum_{\alpha} \lambda^{\alpha} \phi_{\text{obs}}^{\alpha}}
+$$
+
+Evaluating the empirical log-likelihood (average code length):
+
+$$
+\begin{aligned}
+\frac{1}{M} \sum \log p(D \mid x) &= \frac{1}{M} \sum \log \left[ \frac{1}{Z(x)} e^{-\sum_{\alpha} \lambda^{\alpha} \phi_{\text{obs}}^{\alpha}} \right] \\
+&= -\log(Z(x)) - \sum_{\alpha=1}^{K} \lambda^{\alpha} \mu_{\text{text}{obs}}^{\alpha} \\
+&= -\log Z(x) - \sum_{\alpha=1}^{K} \lambda^{\alpha} \int p \phi^{\alpha} \\
+&= -\log Z(x) - \sum_{\alpha=1}^{K} P(\lambda^{\alpha} \phi^{\alpha}) \\
+&= -\text{entropy}(P)
+\end{aligned}
+$$
+
+### Optimizing Feature Selection
+To keep model complexity under check, we need to fix the number of features $K$. Entropy minimization provides an optimal criterion for finding the best subset of features:
+
+$$
+\underset{|S| = K}{\operatorname{argmin}} \Big\{ \max \text{ entropy}(P) \Big\}
+$$

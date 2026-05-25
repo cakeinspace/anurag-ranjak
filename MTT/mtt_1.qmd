@@ -1,0 +1,60 @@
+---
+title: "Matrix-Tree Theorem"
+execute:
+  enabled: true
+---
+
+## Applications in probabilistic graphical models.
+
+If the probability of a tree is proportional to the product of edge weights. Then - 
+
+The partition function is a sum over exponentially many spanning trees. 
+
+The Matrix–Tree Theorem shows that this sum can be computed exactly as a determinant of a reduced Laplacian matrix. 
+
+$$
+P(E) = \frac{1}{Z} \prod_{(i,j) \in E} \beta_{ij}
+$$
+$$
+Z = \det(Q(\beta)), \quad
+Q_{uv} =
+\begin{cases}
+- \beta_{uv}, & 1 \leq u < v \leq n\\
+\sum_{v'=1}^n \beta_{v' v}, & 1 \leq u = v \leq n\\
+\end{cases}
+$$
+
+Derivatives of the log-partition function can be used to computate expectations. Refer to the Meila and Jaakkola paper 2000 for details.
+
+
+In the nimwegen paper 2008- 
+
+$$
+P(D | T) = P(D_r) \prod_i P(D_i | D_{\pi(i)}) 
+$$
+
+$$
+P(D_i | D_{\pi(i)}) = P(D_i)\frac{P(D_i, D_{\pi(i)})}{P(D_i) P(D_{\pi(i)})}
+$$
+
+Substitute above and then we can use the MTT to compute the partition function and its derivatives to compute expectations over all possible tree structures $T$. Then we can also compute the edge marginals as well.
+
+I guess the big message is that we can compute the partition function analytically if the probability distribution factorizes over the edeges of the tree structure.
+
+## Applications in chemical reaction networks.
+
+
+$$
+\frac{dx}{dt} = L(G).x(t), \sum_i x_i(t) = 1
+$$
+Here $L(G)$ is the laplacian matrix of the graph. At steady state we have $L(G).x = 0$. This implies $x \in ker L(G)$. If $G$ is strongly connected then dim $ker L(G) = 1$. why since columns of L sum to 0 hence there is an eigenvalue 0 and there is a unique (upto scaling) positive eigenvector. dim $ker L(G)$ is the number of strongly connected components since G is strongly connected dim is 1.
+
+In this case the basis element $\rho(G)$ is given by 
+
+$$\rho_i(G) = \sum_{T \in \Theta_i(G)} \left( \prod_{j \xrightarrow{a} k \in T} a \right).$$
+
+The argument is we count the number of spanning trees which have a sink in $i$ and $\rho_i(G)$ is product of all edge labels in each such tree summed over all the trees which have a sink in $i$ and then finally $x_i^{ss} = \frac{\rho_i(G)}{\sum_i \rho_i(G)}$ and this gives the steady states of the system in terms of the rational functions of the edge labels. For $x_i^{ss}$ I have used the normalisation constraint. Note that I can also write up any master equation in this manner and compute the probabilities. 
+
+The edge labels can themselves be derived from another chemical reaction network and hence this way we can put in non-linearities into the system.
+
+**I skipped the proof of dim $ker L(G)$** and how to extend it to non-equilibrium systems. 
