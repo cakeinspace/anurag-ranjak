@@ -1,6 +1,5 @@
 ---
 title: "Minimax Entropy"
-author: "Handwritten Notes Transcription"
 ---
 
 ## Introduction to Min-Max Entropy
