@@ -50,7 +50,7 @@ You can read about some of the topics that I use in my research or that piqued m
 [anuragranjak@gmail.com](mailto:anuragranjak@gmail.com) / [LinkedIn](https://www.linkedin.com/in/anurag-ranjak-70872a56/)
 
 <style>
-main h1, main h3 {
+h1, h3 {
   text-decoration: underline;
 }
 </style>
