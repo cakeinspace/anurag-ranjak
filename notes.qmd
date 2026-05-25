@@ -12,6 +12,6 @@ Welcome to my collection of notes on statistical physics, machine learning, and 
 
 - [Product Partition Models](cluster_analysis_casella/cluster_v1.ipynb) — Bayesian clustering and partition models for statistical analysis.
 
-- [Min-Max Entropy Principles](minimax/min_max_entropy_notes.qmd) — Feature binding and selection using maximum entropy and minimum entropy principles.
+- [Minimax Entropy](minimax/min_max_entropy_notes.qmd) — Feature binding and selection using minimax entropy principles.
 
 - [Matrix-Tree Theorem](MTT/mtt_1.qmd) — Applications of the Matrix-Tree Theorem in probabilistic graphical models and chemical reaction networks.

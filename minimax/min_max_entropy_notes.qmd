@@ -1,5 +1,5 @@
 ---
-title: "Min-Max Entropy Principles"
+title: "Minimax Entropy"
 author: "Handwritten Notes Transcription"
 ---
 
@@ -84,3 +84,9 @@ To keep model complexity under check, we need to fix the number of features $K$.
 $$
 \underset{|S| = K}{\operatorname{argmin}} \Big\{ \max \text{ entropy}(P) \Big\}
 $$
+
+---
+
+### References
+
+- **Minimax Entropy Principle and Its Application to Texture Modeling**, Song Chun Zhu, Ying Nian Wu, David Mumford
