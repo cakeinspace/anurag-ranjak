@@ -467,3 +467,9 @@ point in the large-$\beta$ limit.
 
 **I have skipped Glauber dynamics and Restricted Boltzmann Machine
 interpretation of the Hopfield networks.**
+
+---
+
+### References
+
+- **Hopfield Networks as Models of Emergent Function in Biology**, Maria Yampolskaya, Pankaj Mehta
