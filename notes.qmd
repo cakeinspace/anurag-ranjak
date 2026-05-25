@@ -1,0 +1,17 @@
+---
+title: "Notes"
+---
+
+Welcome to my collection of notes on statistical physics, machine learning, and related topics.
+
+## Posts
+
+- [Hopfield Networks as Models of Emergent Function in Biology](hopfield.qmd) — Mathematical descriptions of classic and modern Hopfield networks, storage capacity, projection methods, and energy-based models.
+
+- [Gaussian Belief Propagation on Trees](bp/bp1.qmd) — Efficient inference on tree-structured graphical models using message passing, Gaussian convolutions, and the Schur complement.
+
+- [Product Partition Models](cluster_analysis_casella/cluster_v1.ipynb) — Bayesian clustering and partition models for statistical analysis.
+
+- [Min-Max Entropy Principles](minimax/min_max_entropy_notes.qmd) — Feature binding and selection using maximum entropy and minimum entropy principles.
+
+- [Matrix-Tree Theorem](MTT/mtt_1.qmd) — Applications of the Matrix-Tree Theorem in probabilistic graphical models and chemical reaction networks.

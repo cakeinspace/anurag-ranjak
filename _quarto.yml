@@ -7,9 +7,9 @@ website:
   site-url: https://cakeinspace.github.io/personal-website
   navbar:
     left:
-      - href: about.qmd
-        text: About
       - href: index.qmd
+        text: About
+      - href: notes.qmd
         text: Notes
 
 format:
