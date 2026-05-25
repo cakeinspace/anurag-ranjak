@@ -4,8 +4,6 @@ title: "About"
 
 <img src="profile.jpeg" alt="Anurag Ranjak" width="120" style="float: right; margin-left: 1.5rem; margin-bottom: 1rem;">
 
-## Anurag Ranjak
-
 I am a PhD student in the van Nimwegen lab at the Biozentrum, where I develop Bayesian methods for the analysis of single-cell RNA-seq (scRNA-seq) datasets. My current research focuses on inferring gene regulatory networks from high-throughput omics data (## add link here). In addition, I have worked on benchmarking computational tools to help establish best practices for omics data analysis (## add link here). To learn more about our approach to scRNA-seq analysis, you can read our tutorial: [insert link here]. Broadly, I am interested in gene regulation and in developing computational methods for the analysis of high throughput and high dimensional biological datasets.
 
 In another life I spent a couple of years analysing single cell and spatial transcriptomics datasets (## add link 1 and 2.) in neuroscience labs in EPFL and UNIL.
@@ -50,3 +48,9 @@ You can read about some of the topics that I use in my research or that piqued m
 ### Contact
 
 [anuragranjak@gmail.com](mailto:anuragranjak@gmail.com) / [LinkedIn](https://www.linkedin.com/in/anurag-ranjak-70872a56/)
+
+<style>
+h3 {
+  text-decoration: underline;
+}
+</style>
